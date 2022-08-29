@@ -1,0 +1,172 @@
+﻿@model List<CrmProject.Entities.Customer>
+@{
+	ViewData["Title"] = "Customers";
+	ViewData["PageName"] = "customer-index";
+
+}
+@*<style>
+	.input-group.input-group-outline .form-label{
+	top:-0.6rem;}
+</style>*@
+<div class="row">
+	<div class="col-12">
+		<div class="card my-4">
+			<div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+				<div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+					<h6 class="text-white text-capitalize ps-3">Customer List</h6>
+				</div>
+			</div>
+			<div class="card-body pb-2">
+				<div class="px-4 d-flex justify-content-between">
+					<div>
+						<button class="btn btn-icon btn-3 btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modal-create-customer">
+							<i class="material-icons">add</i>
+							<span>New Customer</span>
+						</button>
+					</div>
+					<div>
+						<div class="input-group input-group-sm input-group-outline">
+							<label class="form-label">Search</label>
+							<input type="text" class="form-control form-control-sm">
+						</div>
+					</div>
+				</div>
+				<div class="table-responsive p-0">
+					<table class="table align-items-center mb-0">
+						<thead>
+							<tr>
+								<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Customer Fullname</th>
+								<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
+								<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Civil/Corporate</th>
+								<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+								<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Registry Date</th>
+
+								<th class="text-secondary opacity-7">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							@if (Model.Count == 0 || Model == null)
+							{
+								<tr>
+									<td class="text-center" colspan="6">There is no customer data.</td>
+								</tr>
+							}
+							@foreach (var customer in Model)
+							{
+								<tr>
+									<td>
+										<div class="d-flex px-2 py-1">
+
+											<div class="d-flex flex-column justify-content-center">
+												<h6 class="mb-0 text-sm">@customer.Fullname</h6>
+											</div>
+										</div>
+									</td>
+									<td>
+										<p class="text-xs font-weight-bold text-secondary mb-0"><a href="mailto:john@creative-tim.com" target="_blank">@customer.Email/a></p>
+
+									</td>
+									<td>
+										<p class="text-xs text-center font-weight-bold mb-0">@(customer.IsCorporate ? "Corporate" : "Civil") </p>
+									</td>
+									<td class="align-middle text-center text-sm">
+										<span class="badge badge-sm bg-gradient-@(customer.Locked?"secondary":"success")">@(customer.Locked ? "Passive" : "Active")</span>
+									</td>
+									<td class="align-middle text-center">
+										<span class="text-secondary text-xs font-weight-bold">@customer.createdAt</span>
+									</td>
+									<td class="align-middle">
+										<a class="text-info font-weight-bold text-xs">
+											Details
+										</a>
+										<a class="text-secondary font-weight-bold text-xs">
+											Edit
+										</a>
+										<a class="text-danger font-weight-bold text-xs">
+											Delete
+										</a>
+									</td>
+								</tr>
+							}
+
+
+
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+		</div>
+
+
+		<div class="modal fade" id="modal-create-customer" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+			<div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h6 class="modal-title font-weight-normal" id="modal-title-default">Create New Customer</h6>
+						<button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div>
+							<p class="text-sm">bilgilerndi,rme için buraya bir şeyler yazılcak şimdilik böyle kalsın</p>
+							<div class="input-group input-group-outline my-3">
+								<label class="form-label">Fullname</label>
+								<input id="name" type="text" class="form-control">
+							</div>
+							<div class="input-group input-group-outline my-3">
+								<label class="form-label">Email</label>
+								<input id="email" type="email" class="form-control">
+							</div>
+							<div class="input-group input-group-outline  my-3">
+								<label class="form-label">Phone</label>
+								<input id="phone" type="tel" class="form-control">
+							</div>
+							<div class="form-check">
+								<input id="iscorporate" class="form-check-input my-3" type="checkbox" checked="">
+								<label class="custom-control-label">Corporate</label>
+							</div>
+							<div class="form-check">
+								<input id="isactive" class="form-check-input my-3" type="checkbox" checked="">
+								<label class="custom-control-label">Active</label>
+							</div>
+							<div class="input-group input-group-outline my-3">
+								<label class="form-label">Explanation</label>
+								<textarea id="exp" cols="30" rows="2" type="email" class="form-control"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn bg-gradient-primary" onclick="CreateCustomer()">Save</button>
+						<button type="button" class="btn btn-link  ml-auto" data-bs-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+@section Scripts{
+	<script>
+		function CreateCustomer() {
+			var modal_body = $("#modal-create-customer .modal-body");
+			var fname = modal_body.find('#name').val();
+			var femail = modal_body.find('#email').val();
+			var fphone = modal_body.find('#phone').val();
+			var fexp = modal_body.find('#exp').val();
+			var fisactive = modal_body.find('#isactive').is(':checked');
+			var fiscorporate = modal_body.find('#iscorporate').is(':checked');
+
+			var data = {
+				"name": fname,
+				"email": femail,
+				"phone": fphone,
+				"exp": fexp,
+				"isactive": fisactive,
+				"iscorporate": fiscorporate
+
+			};
+			console.log(data);
+		}
+	</script>
+}
