@@ -1,6 +1,6 @@
 ﻿namespace CrmProject.Models
 {
-    public class CreateCustomerModel
+    public class CreateModel
     {
         public string Fullname { get; set; }
         public string Email { get; set; }

@@ -12,19 +12,15 @@ namespace CrmProject.Entities
         [Required, StringLength(60)]
         public string Fullname { get; set; }
 
-        [StringLength(60)]
+        [Required,StringLength(60)]
         public string Email { get; set; }
 
-        [StringLength(25)]
+        [Required,StringLength(25)]
         public string Phone { get; set; }
-
-        [StringLength(500)]
+        [StringLength(250)]
         public string Explanation { get; set; }
-
         public bool Locked { get; set; }
         public bool IsCorporate { get; set; }
-
-
         public DateTime createdAt { get; set; }
 
 

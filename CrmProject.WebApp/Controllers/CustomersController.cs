@@ -32,35 +32,44 @@ namespace CrmProject.WebApp.Controllers
         {
             return View();
         }
-        public ActionResult FakeInsert()
-        {
-            CreateCustomerModel model = new CreateCustomerModel
-            {
-                Fullname = "John Doe",
-                IsCorporate = false,
-                Email = "jhohn@doe.com",
-                Phone = "876 76",
-                Explanation = "hjsafg ahsklfhf"
-            };
-            _customerService.Create(model);
+        //public ActionResult FakeInsert()
+        //{
+        //    CreateCustomerModel model = new CreateCustomerModel
+        //    {
+        //        Fullname = "John Doe",
+        //        IsCorporate = false,
+        //        Email = "jhohn@doe.com",
+        //        Phone = "876 76",
+        //        Explanation = "hjsafg ahsklfhf"
+        //    };
+        //    _customerService.Create(model);
 
-            return RedirectToAction(nameof(Index));
+        //    return RedirectToAction(nameof(Index));
 
-        }
+        //}
 
         // POST: HomeController1/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult Create(CreateCustomerModel model)
         {
+            AjaxResponseModel<string> response = new AjaxResponseModel<string>();
             if (ModelState.IsValid)
             {
                 _customerService.Create(model);
-                return RedirectToAction(nameof(Index));
+                response.success = "Customer is added successfully";
+                return Json(response);
 
             }
-
-            return View(model);
+            foreach (var key in ModelState.Keys)
+            {
+                var item = ModelState.GetValueOrDefault(key);
+                if (item !=null &&item.Errors.Count > 0)
+                {
+                    item.Errors.ToList().ForEach(err => response.AddError(key, err.ErrorMessage));
+                }
+            }
+            return Json(response);
 
         }
 
@@ -93,7 +102,7 @@ namespace CrmProject.WebApp.Controllers
 
         // POST: HomeController1/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try
